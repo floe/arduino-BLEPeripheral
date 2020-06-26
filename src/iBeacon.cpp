@@ -6,7 +6,7 @@
 #include "iBeacon.h"
 
 iBeacon::iBeacon() :
-  BLEPeripheral()
+  BLEPeripheralObserver()
 {
   this->setConnectable(false);
 }
@@ -35,7 +35,7 @@ void iBeacon::begin(const char* uuidString, unsigned short major, unsigned short
 
   this->setManufacturerData(this->_manufacturerData, i);
 
-  BLEPeripheral::begin();
+  BLEPeripheralObserver::begin();
 }
 
 void iBeacon::loop() {

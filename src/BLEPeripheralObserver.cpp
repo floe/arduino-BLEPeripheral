@@ -6,14 +6,14 @@
 #include "BLEDeviceLimits.h"
 #include "BLEUtil.h"
 
-#include "BLEPeripheral.h"
+#include "BLEPeripheralObserver.h"
 
 //#define BLE_PERIPHERAL_DEBUG
 
 #define DEFAULT_DEVICE_NAME "Arduino"
 #define DEFAULT_APPEARANCE  0x0000
 
-BLEPeripheral::BLEPeripheral(unsigned char req, unsigned char rdy, unsigned char rst) :
+BLEPeripheralObserver::BLEPeripheralObserver(unsigned char req, unsigned char rdy, unsigned char rst) :
 #if defined(NRF51) || defined(NRF52) || defined(__RFduino__)
   _nRF51822(),
 #else
@@ -57,7 +57,7 @@ BLEPeripheral::BLEPeripheral(unsigned char req, unsigned char rdy, unsigned char
   this->_device->setEventListener(this);
 }
 
-BLEPeripheral::~BLEPeripheral() {
+BLEPeripheralObserver::~BLEPeripheralObserver() {
   this->end();
 
   if (this->_remoteAttributes) {
@@ -69,7 +69,7 @@ BLEPeripheral::~BLEPeripheral() {
   }
 }
 
-unsigned char BLEPeripheral::updateAdvertismentData() {
+unsigned char BLEPeripheralObserver::updateAdvertismentData() {
   unsigned char advertisementDataSize = 0;
 
   scanData.length = 0;
@@ -132,7 +132,7 @@ unsigned char BLEPeripheral::updateAdvertismentData() {
   return advertisementDataSize;
 }
 
-void BLEPeripheral::begin() {
+void BLEPeripheralObserver::begin() {
 
   if (this->_localAttributes == NULL) {
     this->initLocalAttributes();
@@ -170,44 +170,44 @@ void BLEPeripheral::begin() {
   this->_device->requestAddress();
 }
 
-void BLEPeripheral::poll() {
+void BLEPeripheralObserver::poll() {
   this->_device->poll();
 }
 
-void BLEPeripheral::end() {
+void BLEPeripheralObserver::end() {
   this->_device->end();
 }
 
-void BLEPeripheral::setAdvertisedServiceUuid(const char* advertisedServiceUuid) {
+void BLEPeripheralObserver::setAdvertisedServiceUuid(const char* advertisedServiceUuid) {
   this->_advertisedServiceUuid = advertisedServiceUuid;
 }
 
-void BLEPeripheral::setServiceSolicitationUuid(const char* serviceSolicitationUuid) {
+void BLEPeripheralObserver::setServiceSolicitationUuid(const char* serviceSolicitationUuid) {
   this->_serviceSolicitationUuid = serviceSolicitationUuid;
 }
 
-void BLEPeripheral::setManufacturerData(const unsigned char manufacturerData[], unsigned char manufacturerDataLength) {
+void BLEPeripheralObserver::setManufacturerData(const unsigned char manufacturerData[], unsigned char manufacturerDataLength) {
   this->_manufacturerData = manufacturerData;
   this->_manufacturerDataLength = manufacturerDataLength;
 }
 
-void BLEPeripheral::setLocalName(const char* localName) {
+void BLEPeripheralObserver::setLocalName(const char* localName) {
   this->_localName = localName;
 }
 
-void BLEPeripheral::setConnectable(bool connectable) {
+void BLEPeripheralObserver::setConnectable(bool connectable) {
   this->_device->setConnectable(connectable);
 }
 
-bool  BLEPeripheral::setTxPower(int txPower) {
+bool  BLEPeripheralObserver::setTxPower(int txPower) {
   return this->_device->setTxPower(txPower);
 }
 
-void BLEPeripheral::setBondStore(BLEBondStore& bondStore) {
+void BLEPeripheralObserver::setBondStore(BLEBondStore& bondStore) {
   this->_device->setBondStore(bondStore);
 }
 
-void BLEPeripheral::startAdvertising() {
+void BLEPeripheralObserver::startAdvertising() {
   int advertisementDataSize = updateAdvertismentData();
   this->_device->updateAdvertisementData(
       advertisementDataSize, advertisementData,
@@ -215,31 +215,31 @@ void BLEPeripheral::startAdvertising() {
   this->_device->startAdvertising();
 }
 
-void BLEPeripheral::stopAdvertising() {
+void BLEPeripheralObserver::stopAdvertising() {
   this->_device->stopAdvertising();
 }
 
-void BLEPeripheral::startScanning() {
+void BLEPeripheralObserver::startScanning() {
   this->_device->startScanning();
 }
 
-void BLEPeripheral::stopScanning() {
+void BLEPeripheralObserver::stopScanning() {
   this->_device->stopScanning();
 }
 
-void BLEPeripheral::setDeviceName(const char* deviceName) {
+void BLEPeripheralObserver::setDeviceName(const char* deviceName) {
   this->_deviceNameCharacteristic.setValue(deviceName);
 }
 
-void BLEPeripheral::setAppearance(unsigned short appearance) {
+void BLEPeripheralObserver::setAppearance(unsigned short appearance) {
   this->_appearanceCharacteristic.setValue((unsigned char *)&appearance, sizeof(appearance));
 }
 
-void BLEPeripheral::addAttribute(BLELocalAttribute& attribute) {
+void BLEPeripheralObserver::addAttribute(BLELocalAttribute& attribute) {
   this->addLocalAttribute(attribute);
 }
 
-void BLEPeripheral::addLocalAttribute(BLELocalAttribute& localAttribute) {
+void BLEPeripheralObserver::addLocalAttribute(BLELocalAttribute& localAttribute) {
   if (this->_localAttributes == NULL) {
     this->initLocalAttributes();
   }
@@ -248,7 +248,7 @@ void BLEPeripheral::addLocalAttribute(BLELocalAttribute& localAttribute) {
   this->_numLocalAttributes++;
 }
 
-void BLEPeripheral::addRemoteAttribute(BLERemoteAttribute& remoteAttribute) {
+void BLEPeripheralObserver::addRemoteAttribute(BLERemoteAttribute& remoteAttribute) {
   if (this->_remoteAttributes == NULL) {
     this->_remoteAttributes = (BLERemoteAttribute**)malloc(BLERemoteAttribute::numAttributes() * sizeof(BLERemoteAttribute*));
   }
@@ -257,91 +257,91 @@ void BLEPeripheral::addRemoteAttribute(BLERemoteAttribute& remoteAttribute) {
   this->_numRemoteAttributes++;
 }
 
-void BLEPeripheral::setAdvertisingInterval(unsigned short advertisingInterval) {
+void BLEPeripheralObserver::setAdvertisingInterval(unsigned short advertisingInterval) {
   this->_device->setAdvertisingInterval(advertisingInterval);
 }
 
-void BLEPeripheral::setConnectionInterval(unsigned short minimumConnectionInterval, unsigned short maximumConnectionInterval) {
+void BLEPeripheralObserver::setConnectionInterval(unsigned short minimumConnectionInterval, unsigned short maximumConnectionInterval) {
   this->_device->setConnectionInterval(minimumConnectionInterval, maximumConnectionInterval);
 }
 
-void BLEPeripheral::disconnect() {
+void BLEPeripheralObserver::disconnect() {
   this->_device->disconnect();
 }
 
-BLECentral BLEPeripheral::central() {
+BLECentral BLEPeripheralObserver::central() {
   this->poll();
 
   return this->_central;
 }
 
-bool BLEPeripheral::connected() {
+bool BLEPeripheralObserver::connected() {
   this->poll();
 
   return this->_central;
 }
 
-void BLEPeripheral::setEventHandler(BLEPeripheralEvent event, BLEPeripheralEventHandler eventHandler) {
+void BLEPeripheralObserver::setEventHandler(BLEPeripheralObserverEvent event, BLEPeripheralObserverEventHandler eventHandler) {
   if (event < sizeof(this->_eventHandlers)) {
     this->_eventHandlers[event] = eventHandler;
   }
 }
 
-void BLEPeripheral::setEventHandler(BLEDeviceEvent event, BLEDeviceEventHandler eventHandler) {
+void BLEPeripheralObserver::setEventHandler(BLEDeviceEvent event, BLEDeviceEventHandler eventHandler) {
   if (event < sizeof(this->_deviceEvents)) {
     this->_deviceEvents[event] = eventHandler;
   }
 }
 
-bool BLEPeripheral::characteristicValueChanged(BLECharacteristic& characteristic) {
+bool BLEPeripheralObserver::characteristicValueChanged(BLECharacteristic& characteristic) {
   return this->_device->updateCharacteristicValue(characteristic);
 }
 
-bool BLEPeripheral::broadcastCharacteristic(BLECharacteristic& characteristic) {
+bool BLEPeripheralObserver::broadcastCharacteristic(BLECharacteristic& characteristic) {
   return this->_device->broadcastCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::canNotifyCharacteristic(BLECharacteristic& characteristic) {
+bool BLEPeripheralObserver::canNotifyCharacteristic(BLECharacteristic& characteristic) {
   return this->_device->canNotifyCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::canIndicateCharacteristic(BLECharacteristic& characteristic) {
+bool BLEPeripheralObserver::canIndicateCharacteristic(BLECharacteristic& characteristic) {
   return this->_device->canIndicateCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::canReadRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::canReadRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->canReadRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::readRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::readRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->readRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::canWriteRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::canWriteRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->canWriteRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::writeRemoteCharacteristic(BLERemoteCharacteristic& characteristic, const unsigned char value[], unsigned char length) {
+bool BLEPeripheralObserver::writeRemoteCharacteristic(BLERemoteCharacteristic& characteristic, const unsigned char value[], unsigned char length) {
   return this->_device->writeRemoteCharacteristic(characteristic, value, length);
 }
 
-bool BLEPeripheral::canSubscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::canSubscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->canSubscribeRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::subscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::subscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->subscribeRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::canUnsubscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::canUnsubscribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->canUnsubscribeRemoteCharacteristic(characteristic);
 }
 
-bool BLEPeripheral::unsubcribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
+bool BLEPeripheralObserver::unsubcribeRemoteCharacteristic(BLERemoteCharacteristic& characteristic) {
   return this->_device->unsubcribeRemoteCharacteristic(characteristic);
 }
 
-void BLEPeripheral::BLEDeviceConnected(BLEDevice& /*device*/, const unsigned char* address) {
+void BLEPeripheralObserver::BLEDeviceConnected(BLEDevice& /*device*/, const unsigned char* address) {
   this->_central.setAddress(address);
 
 #ifdef BLE_PERIPHERAL_DEBUG
@@ -349,19 +349,19 @@ void BLEPeripheral::BLEDeviceConnected(BLEDevice& /*device*/, const unsigned cha
   Serial.println(this->_central.address());
 #endif
 
-  BLEPeripheralEventHandler eventHandler = this->_eventHandlers[BLEConnected];
+  BLEPeripheralObserverEventHandler eventHandler = this->_eventHandlers[BLEConnected];
   if (eventHandler) {
     eventHandler(this->_central);
   }
 }
 
-void BLEPeripheral::BLEDeviceDisconnected(BLEDevice& /*device*/) {
+void BLEPeripheralObserver::BLEDeviceDisconnected(BLEDevice& /*device*/) {
 #ifdef BLE_PERIPHERAL_DEBUG
   Serial.print(F("Peripheral disconnected from central: "));
   Serial.println(this->_central.address());
 #endif
 
-  BLEPeripheralEventHandler eventHandler = this->_eventHandlers[BLEDisconnected];
+  BLEPeripheralObserverEventHandler eventHandler = this->_eventHandlers[BLEDisconnected];
   if (eventHandler) {
     eventHandler(this->_central);
   }
@@ -369,43 +369,43 @@ void BLEPeripheral::BLEDeviceDisconnected(BLEDevice& /*device*/) {
   this->_central.clearAddress();
 }
 
-void BLEPeripheral::BLEDeviceBonded(BLEDevice& /*device*/) {
+void BLEPeripheralObserver::BLEDeviceBonded(BLEDevice& /*device*/) {
 #ifdef BLE_PERIPHERAL_DEBUG
   Serial.print(F("Peripheral bonded: "));
   Serial.println(this->_central.address());
 #endif
 
-  BLEPeripheralEventHandler eventHandler = this->_eventHandlers[BLEBonded];
+  BLEPeripheralObserverEventHandler eventHandler = this->_eventHandlers[BLEBonded];
   if (eventHandler) {
     eventHandler(this->_central);
   }
 }
 
-void BLEPeripheral::BLEDeviceRemoteServicesDiscovered(BLEDevice& /*device*/) {
+void BLEPeripheralObserver::BLEDeviceRemoteServicesDiscovered(BLEDevice& /*device*/) {
 #ifdef BLE_PERIPHERAL_DEBUG
   Serial.print(F("Peripheral discovered central remote services: "));
   Serial.println(this->_central.address());
 #endif
 
-  BLEPeripheralEventHandler eventHandler = this->_eventHandlers[BLERemoteServicesDiscovered];
+  BLEPeripheralObserverEventHandler eventHandler = this->_eventHandlers[BLERemoteServicesDiscovered];
   if (eventHandler) {
     eventHandler(this->_central);
   }
 }
 
-void BLEPeripheral::BLEDeviceCharacteristicValueChanged(BLEDevice& /*device*/, BLECharacteristic& characteristic, const unsigned char* value, unsigned char valueLength) {
+void BLEPeripheralObserver::BLEDeviceCharacteristicValueChanged(BLEDevice& /*device*/, BLECharacteristic& characteristic, const unsigned char* value, unsigned char valueLength) {
   characteristic.setValue(this->_central, value, valueLength);
 }
 
-void BLEPeripheral::BLEDeviceCharacteristicSubscribedChanged(BLEDevice& /*device*/, BLECharacteristic& characteristic, bool subscribed) {
+void BLEPeripheralObserver::BLEDeviceCharacteristicSubscribedChanged(BLEDevice& /*device*/, BLECharacteristic& characteristic, bool subscribed) {
   characteristic.setSubscribed(this->_central, subscribed);
 }
 
-void BLEPeripheral::BLEDeviceRemoteCharacteristicValueChanged(BLEDevice& /*device*/, BLERemoteCharacteristic& remoteCharacteristic, const unsigned char* value, unsigned char valueLength) {
+void BLEPeripheralObserver::BLEDeviceRemoteCharacteristicValueChanged(BLEDevice& /*device*/, BLERemoteCharacteristic& remoteCharacteristic, const unsigned char* value, unsigned char valueLength) {
   remoteCharacteristic.setValue(this->_central, value, valueLength);
 }
 
-void BLEPeripheral::BLEDeviceAddressReceived(BLEDevice& device, const unsigned char* address) {
+void BLEPeripheralObserver::BLEDeviceAddressReceived(BLEDevice& device, const unsigned char* address) {
 #ifdef BLE_PERIPHERAL_DEBUG
   char addressStr[18];
 
@@ -420,28 +420,28 @@ void BLEPeripheral::BLEDeviceAddressReceived(BLEDevice& device, const unsigned c
   }
 }
 
-void BLEPeripheral::BLEDeviceTemperatureReceived(BLEDevice& device, float temperature) {
+void BLEPeripheralObserver::BLEDeviceTemperatureReceived(BLEDevice& device, float temperature) {
   BLEDeviceEventHandler eventHandler = this->_deviceEvents[BLETemperatureReceived];
   if (eventHandler) {
     eventHandler(&temperature);
   }
 }
 
-void BLEPeripheral::BLEDeviceBatteryLevelReceived(BLEDevice& device, float batteryLevel) {
+void BLEPeripheralObserver::BLEDeviceBatteryLevelReceived(BLEDevice& device, float batteryLevel) {
   BLEDeviceEventHandler eventHandler = this->_deviceEvents[BLEBatteryLevelReceived];
   if (eventHandler) {
     eventHandler(&batteryLevel);
   }
 }
 
-void BLEPeripheral::BLEDeviceAdvertisementReceived(BLEDevice& device, const unsigned char* advertisement) {
+void BLEPeripheralObserver::BLEDeviceAdvertisementReceived(BLEDevice& device, const unsigned char* advertisement) {
   BLEDeviceEventHandler eventHandler = this->_deviceEvents[BLEAdvertisementReceived];
   if (eventHandler) {
     eventHandler(advertisement);
   }
 }
 
-void BLEPeripheral::initLocalAttributes() {
+void BLEPeripheralObserver::initLocalAttributes() {
   this->_localAttributes = (BLELocalAttribute**)malloc(BLELocalAttribute::numAttributes() * sizeof(BLELocalAttribute*));
 
   this->_localAttributes[0] = &this->_genericAccessService;

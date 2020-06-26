@@ -6,9 +6,9 @@
 
 #include "BLEHID.h"
 #include "BLEHIDReportMapCharacteristic.h"
-#include "BLEPeripheral.h"
+#include "BLEPeripheralObserver.h"
 
-class BLEHIDPeripheral : public BLEPeripheral
+class BLEHIDPeripheral : public BLEPeripheralObserver
 {
   friend class BLEHID;
 

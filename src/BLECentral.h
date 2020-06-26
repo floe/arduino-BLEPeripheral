@@ -4,11 +4,11 @@
 #ifndef _BLE_CENTRAL_H_
 #define _BLE_CENTRAL_H_
 
-class BLEPeripheral;
+class BLEPeripheralObserver;
 
 class BLECentral
 {
-  friend class BLEPeripheral;
+  friend class BLEPeripheralObserver;
 
   public:
     operator bool() const;
@@ -22,12 +22,12 @@ class BLECentral
     void disconnect();
 
   protected:
-    BLECentral(BLEPeripheral* peripheral);
+    BLECentral(BLEPeripheralObserver* peripheral);
     void setAddress(const unsigned char* address);
     void clearAddress();
 
   private:
-    BLEPeripheral* _peripheral;
+    BLEPeripheralObserver* _peripheral;
     unsigned char  _address[6];
 };
 

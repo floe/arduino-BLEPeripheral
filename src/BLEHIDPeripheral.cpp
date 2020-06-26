@@ -8,7 +8,7 @@ static const PROGMEM unsigned char hidInformationCharacteriticValue[]   = { 0x11
 BLEHIDPeripheral* BLEHIDPeripheral::_instance = NULL;
 
 BLEHIDPeripheral::BLEHIDPeripheral(unsigned char req, unsigned char rdy, unsigned char rst) :
-  BLEPeripheral(req, rdy, rst),
+  BLEPeripheralObserver(req, rdy, rst),
   _bleBondStore(),
 
   _hidService("1812"),
@@ -58,7 +58,7 @@ void BLEHIDPeripheral::begin() {
   this->_hidReportMapCharacteristic.setHids(this->_hids, this->_numHids);
 
   // begin initialization
-  BLEPeripheral::begin();
+  BLEPeripheralObserver::begin();
 }
 
 void BLEHIDPeripheral::clearBondStoreData() {
@@ -70,7 +70,7 @@ void BLEHIDPeripheral::setReportIdOffset(unsigned char reportIdOffset) {
 }
 
 void BLEHIDPeripheral::poll() {
-  BLEPeripheral::poll();
+  BLEPeripheralObserver::poll();
 }
 
 void BLEHIDPeripheral::addHID(BLEHID& hid) {

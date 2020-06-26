@@ -1,14 +1,14 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
 #include <BLEUtil.h>
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 BLEBondStore                     bleBondStore;
 
 // remote services
@@ -29,38 +29,38 @@ void setup() {
   // clears bond data on every boot
   bleBondStore.clearData();
 
-  blePeripheral.setBondStore(bleBondStore);
+  blePeriphObserv.setBondStore(bleBondStore);
 
-  blePeripheral.setServiceSolicitationUuid(ancsService.uuid());
-  blePeripheral.setLocalName("ANCS");
+  blePeriphObserv.setServiceSolicitationUuid(ancsService.uuid());
+  blePeriphObserv.setLocalName("ANCS");
 
   // set device name and appearance
-  blePeripheral.setDeviceName("Arduino ANCS");
-  blePeripheral.setAppearance(0x0080);
+  blePeriphObserv.setDeviceName("Arduino ANCS");
+  blePeriphObserv.setAppearance(0x0080);
 
-  blePeripheral.addRemoteAttribute(ancsService);
-  blePeripheral.addRemoteAttribute(ancsNotificationSourceCharacteristic);
-//  blePeripheral.addRemoteAttribute(ancsControlPointCharacteristic);
-//  blePeripheral.addRemoteAttribute(ancsDataSourceCharacteristic);
+  blePeriphObserv.addRemoteAttribute(ancsService);
+  blePeriphObserv.addRemoteAttribute(ancsNotificationSourceCharacteristic);
+//  blePeriphObserv.addRemoteAttribute(ancsControlPointCharacteristic);
+//  blePeriphObserv.addRemoteAttribute(ancsDataSourceCharacteristic);
 
   // assign event handlers for connected, disconnected to peripheral
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-  blePeripheral.setEventHandler(BLEBonded, blePeripheralBondedHandler);
-  blePeripheral.setEventHandler(BLERemoteServicesDiscovered, blePeripheralRemoteServicesDiscoveredHandler);
+  blePeriphObserv.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeriphObserv.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  blePeriphObserv.setEventHandler(BLEBonded, blePeripheralBondedHandler);
+  blePeriphObserv.setEventHandler(BLERemoteServicesDiscovered, blePeripheralRemoteServicesDiscoveredHandler);
 
   // assign event handlers for characteristic
   ancsNotificationSourceCharacteristic.setEventHandler(BLEValueUpdated, ancsNotificationSourceCharacteristicValueUpdated);
 //  ancsDataSourceCharacteristic.setEventHandler(BLEValueUpdated, ancsDataSourceCharacteristicCharacteristicValueUpdated);
 
   // begin initialization
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 
   Serial.println(F("BLE Peripheral - ANCS"));
 }
 
 void loop() {
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 }
 
 void blePeripheralConnectHandler(BLECentral& central) {

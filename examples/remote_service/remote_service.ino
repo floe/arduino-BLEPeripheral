@@ -1,12 +1,12 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 // create remote services
 BLERemoteService                 remoteGenericAttributeService            = BLERemoteService("1800");
@@ -21,31 +21,31 @@ void setup() {
   while(!Serial); // wait for serial
 #endif
 
-  blePeripheral.setLocalName("remote-attributes");
+  blePeriphObserv.setLocalName("remote-attributes");
 
   // set device name and appearance
-  blePeripheral.setDeviceName("Remote Attributes");
-  blePeripheral.setAppearance(0x0080);
+  blePeriphObserv.setDeviceName("Remote Attributes");
+  blePeriphObserv.setAppearance(0x0080);
 
-  blePeripheral.addRemoteAttribute(remoteGenericAttributeService);
-  blePeripheral.addRemoteAttribute(remoteDeviceNameCharacteristic);
+  blePeriphObserv.addRemoteAttribute(remoteGenericAttributeService);
+  blePeriphObserv.addRemoteAttribute(remoteDeviceNameCharacteristic);
 
   // assign event handlers for connected, disconnected to peripheral
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
-  blePeripheral.setEventHandler(BLERemoteServicesDiscovered, blePeripheralRemoteServicesDiscoveredHandler);
+  blePeriphObserv.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeriphObserv.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  blePeriphObserv.setEventHandler(BLERemoteServicesDiscovered, blePeripheralRemoteServicesDiscoveredHandler);
 
   // assign event handlers for characteristic
   remoteDeviceNameCharacteristic.setEventHandler(BLEValueUpdated, bleRemoteDeviceNameCharacteristicValueUpdatedHandle);
 
   // begin initialization
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 
   Serial.println(F("BLE Peripheral - remote attributes"));
 }
 
 void loop() {
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 }
 
 void blePeripheralConnectHandler(BLECentral& central) {

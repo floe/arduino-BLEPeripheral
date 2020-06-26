@@ -2,9 +2,9 @@
 #define _BLE_SERIAL_H_
 
 #include <Arduino.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
-class BLESerial : public BLEPeripheral, public Stream
+class BLESerial : public BLEPeripheralObserver, public Stream
 {
   public:
     BLESerial(unsigned char req = BLE_DEFAULT_REQ, unsigned char rdy = BLE_DEFAULT_RDY, unsigned char rst = BLE_DEFAULT_RST);

@@ -29,7 +29,7 @@
 
 class nRF51822 : public BLEDevice
 {
-  friend class BLEPeripheral;
+  friend class BLEPeripheralObserver;
 
   protected:
     struct localCharacteristicInfo {

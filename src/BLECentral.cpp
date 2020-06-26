@@ -3,12 +3,12 @@
 
 #include "Arduino.h"
 
-#include "BLEPeripheral.h"
+#include "BLEPeripheralObserver.h"
 
 #include "BLECentral.h"
 #include "BLEUtil.h"
 
-BLECentral::BLECentral(BLEPeripheral* peripheral) :
+BLECentral::BLECentral(BLEPeripheralObserver* peripheral) :
   _peripheral(peripheral)
 {
   this->clearAddress();
