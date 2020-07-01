@@ -46,6 +46,8 @@ void advHandler(const void* adv) {
   Serial.println(address);
   Serial.print(F("got adv with payload "));
   Serial.println(report->dlen);
+  Serial.print(F("RSSI "));
+  Serial.println(report->rssi);
 }
 
 void loop() {
