@@ -173,7 +173,7 @@ class BLEPeripheralObserver : public BLEDeviceEventListener,
 
     BLECentral                     _central;
     BLEPeripheralObserverEventHandler      _eventHandlers[4];
-    BLEDeviceEventHandler          _deviceEvents[3];
+    BLEDeviceEventHandler          _deviceEvents[4]; // TODO: use variable!
 
     BLEEirData                     advertisementData[3];
     BLEEirData                     scanData;
