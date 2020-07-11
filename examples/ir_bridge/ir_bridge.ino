@@ -1,9 +1,9 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
 // https://github.com/shirriff/Arduino-IRremote
 #include <IRremote.h>
@@ -25,8 +25,8 @@ IRsend                           irSend                      = IRsend(/*IR_SEND_
 IRrecv                           irRecv                      = IRrecv(IR_RECV_PIN);
 IRValue                          irValue;
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 // create service and characteristics
 BLEService                       irService                   = BLEService("00004952-0000-bbbb-0123-456789abcdef");
@@ -38,20 +38,20 @@ void setup() {
   Serial.begin(115200);
 
   // set advertised local name and service UUID
-  blePeripheral.setLocalName("IR");
-  blePeripheral.setAdvertisedServiceUuid(irService.uuid());
+  blePeriphObserv.setLocalName("IR");
+  blePeriphObserv.setAdvertisedServiceUuid(irService.uuid());
 
   // add service and characteristics
-  blePeripheral.addAttribute(irService);
-  blePeripheral.addAttribute(irOutputCharacteristic);
-  blePeripheral.addAttribute(irInputCharacteristic);
+  blePeriphObserv.addAttribute(irService);
+  blePeriphObserv.addAttribute(irOutputCharacteristic);
+  blePeriphObserv.addAttribute(irInputCharacteristic);
 
    // assign event handlers for connected, disconnected to peripheral
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  blePeriphObserv.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeriphObserv.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
 
   // begin initialization
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 
   Serial.println(F("BLE IR Peripheral"));
 
@@ -63,7 +63,7 @@ void setup() {
 
 void loop() {
   // poll peripheral
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 
   // poll the ouput characteristic
   pollIrOutput();

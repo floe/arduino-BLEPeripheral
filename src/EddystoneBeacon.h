@@ -4,10 +4,10 @@
 #ifndef _EDDYSTONE_BEACON_H_
 #define _EDDYSTONE_BEACON_H_
 
-#include "BLEPeripheral.h"
+#include "BLEPeripheralObserver.h"
 #include "BLEUuid.h"
 
-class EddystoneBeacon : public BLEPeripheral
+class EddystoneBeacon : public BLEPeripheralObserver
 {
   public:
     EddystoneBeacon(unsigned char req = BLE_DEFAULT_REQ, unsigned char rdy = BLE_DEFAULT_RDY, unsigned char rst = BLE_DEFAULT_RST);

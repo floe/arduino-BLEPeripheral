@@ -1,10 +1,10 @@
-# BLEPeripheral
+# BLEPeripheralObserver
 
 ## Constructor
-Creates the BLEPeripheral object. Pin Arguments are optional as pins are self detecting. See https://github.com/sandeepmistry/arduino-BLEPeripheral#pinouts
+Creates the BLEPeripheralObserver object. Pin Arguments are optional as pins are self detecting. See https://github.com/sandeepmistry/arduino-BLEPeripheral#pinouts
 
 ```c
-BLEPeripheral(unsigned char req = BLE_DEFAULT_REQ, unsigned char rdy = BLE_DEFAULT_RDY, unsigned char rst = BLE_DEFAULT_RST);
+BLEPeripheralObserver(unsigned char req = BLE_DEFAULT_REQ, unsigned char rdy = BLE_DEFAULT_RDY, unsigned char rst = BLE_DEFAULT_RST);
 ```
 * req - REQ pin
  * rdy - RDY pin
@@ -45,7 +45,7 @@ void setAdvertisingInterval(unsigned short advertisingInterval);
 Sets the connection interval to use after a connection has been established.
 
 ```c
-void setConnectionInterval(unsigned short minimumConnectionInterval, unsigned short maximumConnectionInterval); 
+void setConnectionInterval(unsigned short minimumConnectionInterval, unsigned short maximumConnectionInterval);
 ```
 
  * minimumConnectionInterval - minimum connection interval in 1.25 ms increments

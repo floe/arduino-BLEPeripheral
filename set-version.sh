@@ -20,7 +20,7 @@ function man () {
   echo "     ${_B}${0##*/}${B_} ${_U}version${U_}"
   echo
   echo "${_B}DESCRIPTION${B_}"
-  echo "     Utility for updating BLEPeripheral library to specified version."
+  echo "     Utility for updating BLEPeripheralObserver library to specified version."
   echo
   echo "${_B}EXAMPLE${B_}"
   echo "     ${_B}${0##*/}${B_} 4.1.22"

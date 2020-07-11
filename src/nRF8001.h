@@ -12,7 +12,7 @@
 
 class nRF8001 : protected BLEDevice
 {
-  friend class BLEPeripheral;
+  friend class BLEPeripheralObserver;
 
   protected:
     struct localPipeInfo {

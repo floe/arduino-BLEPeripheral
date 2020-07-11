@@ -1,7 +1,7 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 #include <iBeacon.h>
 
 #if !defined(NRF51) && !defined(NRF52) && !defined(__RFduino__)

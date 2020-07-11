@@ -15,9 +15,9 @@
  */
 
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 #include "BLESerial.h"
 
 //custom boards may override default pin definitions with BLESerial(PIN_REQ, PIN_RDY, PIN_RST)

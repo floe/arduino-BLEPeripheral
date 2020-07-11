@@ -1,4 +1,4 @@
-# Arduino BLEPeripheral
+# Arduino BLEPeripheralObserver
 
 [![Build Status](https://travis-ci.org/sandeepmistry/arduino-BLEPeripheral.svg?branch=master)](https://travis-ci.org/sandeepmistry/arduino-BLEPeripheral) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sandeepmistry/arduino-BLEPeripheral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -15,7 +15,7 @@ This is heavily based on @sandeepmistry's [arduino-BLEPeripheral](https://github
    * [nRF51822](http://redbearlab.com/redbearlab-nrf51822)
    * [BLE Nano](http://redbearlab.com/blenano/)
  * [RFduino](http://www.rfduino.com) with [Arduino Add-on](https://github.com/RFduino/RFduino)
- 
+
 **WARNING**: Adafruit nRF51 boards are **NOT** compatible with this library, this includes the [Bluefruit LE UART Friend](https://www.adafruit.com/products/2479), [Bluefruit LE SPI Friend](https://www.adafruit.com/products/2633), [Bluefruit LE Shield](https://www.adafruit.com/products/2746), [Flora Wearable Bluefruit LE Module](https://www.adafruit.com/products/2487), [Feather 32u4 Bluefruit LE](https://www.adafruit.com/products/2829), and [Feather M0 Bluefruit LE](https://www.adafruit.com/products/2995).
 
 ### Nordic Semiconductor nRF51 or nRF52 based boards

@@ -35,7 +35,7 @@ static const char* EDDYSTONE_URL_BEACON_SUFFIX_SUBSTITUTIONS[] = {
 };
 
 EddystoneBeacon::EddystoneBeacon(unsigned char req, unsigned char rdy, unsigned char rst) :
-  BLEPeripheral(req, rdy, rst),
+  BLEPeripheralObserver(req, rdy, rst),
   _bleService("feaa"),
   _bleCharacteristic("feab", BLERead | BLEBroadcast, MAX_SERVICE_DATA_SIZE)
 {
@@ -66,7 +66,7 @@ void EddystoneBeacon::begin(char power, const BLEUuid& uid) {
 
   this->setAdvertisedServiceUuid(this->_bleService.uuid());
 
-  BLEPeripheral::begin();
+  BLEPeripheralObserver::begin();
 
   this->_bleCharacteristic.broadcast();
 }
@@ -77,7 +77,7 @@ void EddystoneBeacon::begin(char power, const char* uri) {
 
   this->setAdvertisedServiceUuid(this->_bleService.uuid());
 
-  BLEPeripheral::begin();
+  BLEPeripheralObserver::begin();
 
   this->_bleCharacteristic.broadcast();
 }

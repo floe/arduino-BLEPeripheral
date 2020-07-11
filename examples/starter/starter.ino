@@ -1,12 +1,12 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 // uuid's can be:
 //   16-bit: "ffff"
@@ -27,23 +27,23 @@ void setup() {
   delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
 #endif
 
-  blePeripheral.setLocalName("local-name"); // optional
-  blePeripheral.setAdvertisedServiceUuid(service.uuid()); // optional
+  blePeriphObserv.setLocalName("local-name"); // optional
+  blePeriphObserv.setAdvertisedServiceUuid(service.uuid()); // optional
 
   // add attributes (services, characteristics, descriptors) to peripheral
-  blePeripheral.addAttribute(service);
-  blePeripheral.addAttribute(characteristic);
-  blePeripheral.addAttribute(descriptor);
+  blePeriphObserv.addAttribute(service);
+  blePeriphObserv.addAttribute(characteristic);
+  blePeriphObserv.addAttribute(descriptor);
 
   // set initial value
   characteristic.setValue(0);
 
   // begin initialization
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 }
 
 void loop() {
-  BLECentral central = blePeripheral.central();
+  BLECentral central = blePeriphObserv.central();
 
   if (central) {
     // central connected to peripheral

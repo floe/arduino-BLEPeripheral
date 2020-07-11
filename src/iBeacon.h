@@ -6,10 +6,10 @@
 
 #if defined(NRF51) || defined(NRF52) || defined(__RFduino__)
 
-#include "BLEPeripheral.h"
+#include "BLEPeripheralObserver.h"
 #include "BLEUuid.h"
 
-class iBeacon : public BLEPeripheral
+class iBeacon : public BLEPeripheralObserver
 {
   public:
     iBeacon();

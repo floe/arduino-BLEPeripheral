@@ -3,14 +3,14 @@
 
 #define NRF51
 #undef __RFduino__
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 #include <BLEUtil.h>
 #include <ble_gap.h>
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 void setup() {
   Serial.begin(115200);
@@ -18,16 +18,16 @@ void setup() {
   delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
 #endif
 
-  blePeripheral.setLocalName("foobaz"); // optional
+  blePeriphObserv.setLocalName("foobaz"); // optional
   
-  blePeripheral.setEventHandler(BLEAddressReceived, addrHandler);
-  blePeripheral.setEventHandler(BLEAdvertisementReceived, advHandler);
+  blePeriphObserv.setEventHandler(BLEAddressReceived, addrHandler);
+  blePeriphObserv.setEventHandler(BLEAdvertisementReceived, advHandler);
 
   // begin initialization
-  blePeripheral.begin();
-  blePeripheral.setConnectable(false);
-  blePeripheral.setAdvertisingInterval(500);
-  blePeripheral.startAdvertising();
+  blePeriphObserv.begin();
+  blePeriphObserv.setConnectable(false);
+  blePeriphObserv.setAdvertisingInterval(500);
+  blePeriphObserv.startAdvertising();
 }
 
 void addrHandler(const void* _addr) {
@@ -46,15 +46,17 @@ void advHandler(const void* adv) {
   Serial.println(address);
   Serial.print(F("got adv with payload "));
   Serial.println(report->dlen);
+  Serial.print(F("RSSI "));
+  Serial.println(report->rssi);
 }
 
 void loop() {
   if (Serial.available() > 0) {
     Serial.read();
     Serial.println("start scanning");
-    blePeripheral.startScanning();
-    blePeripheral.setLocalName("foobarg"); // optional
-    blePeripheral.startAdvertising();
+    blePeriphObserv.startScanning();
+    blePeriphObserv.setLocalName("foobarg"); // optional
+    blePeriphObserv.startAdvertising();
   }
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 }

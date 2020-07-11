@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map For BLEPeripheral
+# Syntax Coloring Map For BLEPeripheralObserver
 #######################################
 
 #######################################
@@ -12,7 +12,7 @@ BLECentral	KEYWORD1
 BLECharacteristic	KEYWORD1
 BLEDescriptor	KEYWORD1
 BLELocalAttribute	KEYWORD1
-BLEPeripheral	KEYWORD1
+BLEPeripheralObserver	KEYWORD1
 BLERemoteAttribute	KEYWORD1
 BLERemoteCharacteristic	KEYWORD1
 BLERemoteService	KEYWORD1

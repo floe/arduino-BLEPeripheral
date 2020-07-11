@@ -1,15 +1,15 @@
 // Copyright (c) Sandeep Mistry. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Import libraries (BLEPeripheral depends on SPI)
+// Import libraries (BLEPeripheralObserver depends on SPI)
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
 // LED pin
 #define LED_PIN   3
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 // create service
 BLEService              ledService           = BLEService("19b10000e8f2537e4f6cd104768a1214");
@@ -27,29 +27,29 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
 
   // set advertised local name and service UUID
-  blePeripheral.setLocalName("LED");
-  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+  blePeriphObserv.setLocalName("LED");
+  blePeriphObserv.setAdvertisedServiceUuid(ledService.uuid());
 
   // add service and characteristic
-  blePeripheral.addAttribute(ledService);
-  blePeripheral.addAttribute(switchCharacteristic);
+  blePeriphObserv.addAttribute(ledService);
+  blePeriphObserv.addAttribute(switchCharacteristic);
 
   // assign event handlers for connected, disconnected to peripheral
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  blePeriphObserv.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeriphObserv.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
 
   // assign event handlers for characteristic
   switchCharacteristic.setEventHandler(BLEWritten, switchCharacteristicWritten);
 
   // begin initialization
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 
   Serial.println(F("BLE LED Peripheral"));
 }
 
 void loop() {
   // poll peripheral
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 }
 
 void blePeripheralConnectHandler(BLECentral& central) {

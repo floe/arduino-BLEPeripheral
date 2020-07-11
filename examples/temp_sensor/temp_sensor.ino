@@ -6,15 +6,15 @@
 // DHT library: https://github.com/adafruit/DHT-sensor-library
 #include "DHT.h"
 #include <SPI.h>
-#include <BLEPeripheral.h>
+#include <BLEPeripheralObserver.h>
 
 #define DHTTYPE DHT22
 #define DHTPIN 3
 
 DHT dht(DHTPIN, DHTTYPE);
 
-//custom boards may override default pin definitions with BLEPeripheral(PIN_REQ, PIN_RDY, PIN_RST)
-BLEPeripheral                    blePeripheral                            = BLEPeripheral();
+//custom boards may override default pin definitions with BLEPeripheralObserver(PIN_REQ, PIN_RDY, PIN_RST)
+BLEPeripheralObserver                    blePeriphObserv                            = BLEPeripheralObserver();
 
 BLEService tempService = BLEService("CCC0");
 BLEFloatCharacteristic tempCharacteristic = BLEFloatCharacteristic("CCC1", BLERead | BLENotify);
@@ -35,22 +35,22 @@ void setup() {
   delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
 #endif
 
-  blePeripheral.setLocalName("Temperature");
+  blePeriphObserv.setLocalName("Temperature");
 
-  blePeripheral.setAdvertisedServiceUuid(tempService.uuid());
-  blePeripheral.addAttribute(tempService);
-  blePeripheral.addAttribute(tempCharacteristic);
-  blePeripheral.addAttribute(tempDescriptor);
+  blePeriphObserv.setAdvertisedServiceUuid(tempService.uuid());
+  blePeriphObserv.addAttribute(tempService);
+  blePeriphObserv.addAttribute(tempCharacteristic);
+  blePeriphObserv.addAttribute(tempDescriptor);
 
-  blePeripheral.setAdvertisedServiceUuid(humidityService.uuid());
-  blePeripheral.addAttribute(humidityService);
-  blePeripheral.addAttribute(humidityCharacteristic);
-  blePeripheral.addAttribute(humidityDescriptor);
+  blePeriphObserv.setAdvertisedServiceUuid(humidityService.uuid());
+  blePeriphObserv.addAttribute(humidityService);
+  blePeriphObserv.addAttribute(humidityCharacteristic);
+  blePeriphObserv.addAttribute(humidityDescriptor);
 
-  blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
-  blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
+  blePeriphObserv.setEventHandler(BLEConnected, blePeripheralConnectHandler);
+  blePeriphObserv.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
 
-  blePeripheral.begin();
+  blePeriphObserv.begin();
 
   Timer1.initialize(2 * 1000000); // in milliseconds
   Timer1.attachInterrupt(timerHandler);
@@ -59,7 +59,7 @@ void setup() {
 }
 
 void loop() {
-  blePeripheral.poll();
+  blePeriphObserv.poll();
 
   if (readFromSensor) {
     setTempCharacteristicValue();
